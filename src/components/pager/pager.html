@@ -1,0 +1,54 @@
+<template>
+  <require from="components/pager/pager.css"></require>
+
+  <div class="pager-container">
+    <button type="button" if.bind="enableFirstLastPageArrows" disabled.bind="!canPageBackward" click.delegate="pageToBeginning()">
+      <template replaceable part="page-to-beginning-content">
+        |<
+      </template>
+    </button>
+    <button type="button" if.bind="enablePageArrows" disabled.bind="!canPageBackward" click.delegate="retreat()">
+      <template replaceable part="page-retreat-content">
+        <
+      </template>
+    </button>
+    <button type="button" if.bind="hasMultiplePages" disabled.bind="!canPageBackward" click.delegate="pageToBeginning()">
+      <template replaceable part="page-first-content">
+        ${firstPage}
+      </template>
+    </button>
+    <button type="button" if.bind="hasMorePagesBackward" disabled>
+      <template replaceable part="page-filler-before-content">
+        ...
+      </template>
+    </button>
+    <template repeat.for="page of pagesRange">
+      <button type="button" disabled.bind="isCurrentPage(page.page)" click.delegate="pageTo(page.page)">
+        <template replaceable part="page-content">
+          ${page.displayPage}
+        </template>
+      </button>
+    </template>
+    <button type="button" if.bind="hasMorePagesForward" disabled>
+      <template replaceable part="page-filler-after-content">
+        ...
+      </template>
+    </button>
+    <button type="button" if.bind="hasMultiplePages" disabled.bind="!canPageForward" click.delegate="pageToEnd()">
+      <template replaceable part="page-last-content">
+        ${totalNumberOfPages}
+      </template>
+    </button>
+    <button type="button" if.bind="enablePageArrows" disabled.bind="!canPageForward" click.delegate="advance()">
+      <template replaceable part="page-advance-content">
+        >
+      </template>
+    </button>
+    <button type="button" if.bind="enableFirstLastPageArrows" disabled.bind="!canPageForward" click.delegate="pageToEnd()">
+      <template replaceable part="page-to-end-content">
+        >|
+      </template>
+    </button>
+    <input if.bind="enablePageInput" value.bind="displayPageInput" blur.trigger="updateCurrentPage()" class="${ !isValidPageInput ? 'invalid' : '' }" />
+  </div>
+</template>

@@ -1,0 +1,60 @@
+@mixin box-shadow($shadow-color) {
+  -moz-box-shadow:    3px 5px 6px $shadow-color;
+  -webkit-box-shadow: 3px 5px 6px $shadow-color;
+  box-shadow:         3px 5px 6px $shadow-color;
+}
+
+.pager-container {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+
+  & button, input {
+    border-radius: 5px;
+    border: 1px solid #DDDDDD;
+    background-color: #FFFFFF;
+    padding: 7px;
+    font-size: .9rem;
+  }
+
+  > compose {
+    flex: 1 0;
+    margin: 2px;
+  }
+
+  & button {
+    width: 100%;
+    min-width: 20px;
+    color: #428BCA;
+
+    &:hover {
+      cursor: pointer;
+      @include box-shadow(#CCCCCC);
+    }
+
+    &[disabled] {
+      cursor: default;
+      color: #777777;
+      box-shadow: 0 0;
+    }
+  }
+
+  & input {
+    flex: 2 1;
+    margin: 2px;
+
+    &:hover, &:focus {
+      @include box-shadow(#CCCCCC);
+    }
+
+    &.invalid {
+      border-color: #FF0000;
+
+      &:hover, &:focus {
+        @include box-shadow(#FFA9A9);
+      }
+    }
+  }
+}

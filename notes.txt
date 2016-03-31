@@ -1,0 +1,9 @@
+npm install --save-dev gulp-sass
+-update 
+	build/paths.js (add for scss)
+	build/tasks/build.js (build-css)
+	build/tasks/watch.js (build-css)
+	index.html (title/message)
+-replace
+	favicon.ico
+	src
