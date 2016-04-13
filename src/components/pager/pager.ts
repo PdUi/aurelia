@@ -1,13 +1,15 @@
 import {bindable, containerless, inject, LogManager} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {PagerOptions} from 'components/pager/pager-options';
 
 let logger = LogManager.getLogger('pager');
 
 @containerless()
+@inject(EventAggregator)
 export class Pager {
   @bindable public options: PagerOptions;
-  @bindable public currentPage: number;
 
+  public currentPage: number;
   public canPageBackward: boolean;
   public canPageForward: boolean;
   public displayPageInput: any;
@@ -22,18 +24,23 @@ export class Pager {
   public pagesRange: any[] = [];
   public totalNumberOfPages: number;
 
+  private _eventAggregator: EventAggregator;
   private _displayCurrentPage: any;
   private _options: PagerOptions;
+  private _id: string;
 
-  public constructor() {
+  public constructor(eventAggregator: EventAggregator) {
     logger.info('constructor');
+    this._eventAggregator = eventAggregator;
     this.processOptions(new PagerOptions());
     this.displayCurrentPage = 1;
   }
 
   public bind() {
     logger.info('bind');
+    logger.info(JSON.stringify(this.options));
     this.processOptions(this.options);
+    this._eventAggregator.publish('PageChangeOccurred', {id: this._id, currentPage: this.currentPage});
   }
 
   private processOptions(options: PagerOptions) {
@@ -49,6 +56,7 @@ export class Pager {
     this.hasMultiplePages = this._options.hasMultiplePages;
     this.enablePageArrows = this._options.enablePageArrows;
     this.enableFirstLastPageArrows = this._options.enableFirstLastPageArrows;
+    this._id = this._id || this._options.id;
     this.updateState();
   }
 
@@ -60,6 +68,7 @@ export class Pager {
   public set displayCurrentPage(currentPage: any) {
     logger.info('set:displayCurrentPage = ' + currentPage);
     this.currentPage = this._options.convertToDecimal(currentPage);
+    this._eventAggregator.publish('PageChangeOccurred', {id: this._id, currentPage: this._options.convertToDecimal(currentPage)});
     this._displayCurrentPage = currentPage;
   }
 

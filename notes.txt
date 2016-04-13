@@ -4,6 +4,7 @@ npm install --save-dev gulp-sass
 	build/tasks/build.js (build-css)
 	build/tasks/watch.js (build-css)
 	index.html (title/message)
+	config.js (add to map: "aurelia-event-aggregator": "npm:aurelia-event-aggregator@1.0.0-beta.1.2.0")
 -replace
 	favicon.ico
 	src

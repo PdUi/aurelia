@@ -1,0 +1,59 @@
+<template>
+  <require from="components/grid/grid.css"></require>
+
+  <div class="grid-container">
+    <table class="table-striped grid">
+      <thead>
+        <tr>
+          <th repeat.for="columnDefinition of columnDefinitions">
+            <div click.delegate="sortColumn($event, columnDefinition)">
+              <div if.bind="enableColumnSorting">
+                <i show.bind="sortedColumnId === columnDefinition.id && sortDirection === 'ascending'" class="glyphicon glyphicon-chevron-up">&#9650;</i>
+              </div>
+              ${columnDefinition.displayName}
+              <div if.bind="enableColumnSorting">
+                <i show.bind="sortedColumnId === columnDefinition.id && sortDirection === 'descending'" class="glyphicon glyphicon-chevron-down">&#9660;</i>
+              </div>
+            </div>
+            <div class="filter">&sdote;</div>
+          </th>
+          <th if.bind="!hasIndividualColumnPerAction && actions.length > 0" id="grid-actions-column"></th>
+          <th if.bind="hasIndividualColumnPerAction"
+              repeat.for="action of actions">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr repeat.for="row of rows" class="${ row.hasChanged ? 'changed' : ''} ${ selectedRowId === row.id ? 'selected' : '' } ${ hoveredRowId && hoveredRowId === row.id ? 'hovered' : '' }">
+          <td repeat.for="columnDefinition of columnDefinitions"
+              click.delegate="onCellClicked($event, columnDefinition, row)"
+              mouseenter.trigger="onMouseEnter($event, columnDefinition, row)"
+              mouseleave.trigger="onMouseLeave($event, columnDefinition, row)"
+              class="${ row.changes[columnDefinition.propertyName] !== row[columnDefinition.propertyName] ? 'changed' : '' } ${ selectedColumnId === columnDefinition.id  ? 'selected' : '' } ${ hoveredColumnId === columnDefinition.id ? 'hovered' : '' }">
+              <input if.bind="enableInlineEditing"
+                     show.bind="selectedColumnId === columnDefinition.id && row.id === selectedRowId"
+                     value.bind="row.changes[columnDefinition.propertyName]"
+                     blur.trigger="onBlur($event, columnDefinition, row)"
+                     type="text" />
+              <span show.bind="selectedColumnId !== columnDefinition.id || row.id !== selectedRowId">
+                  ${row.changes[columnDefinition.propertyName]}
+              </span>
+              <span show.bind="row.changes[columnDefinition.propertyName] !== row[columnDefinition.propertyName]"
+                    click.delegate="clearChange($event, columnDefinition, row)">x</span>
+          </td>
+          <td if.bind="!hasIndividualColumnPerAction && actions.length">
+            <span repeat.for="action of actions" click.delegate="performAction(action, row)">
+              ${action.description}
+            </span>
+          </td>
+          <td if.bind="hasIndividualColumnPerAction"
+              repeat.for="action of actions">
+            <span click.delegate="performAction(action, row)">
+              ${action.description}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>

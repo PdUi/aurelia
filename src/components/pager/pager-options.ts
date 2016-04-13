@@ -25,6 +25,7 @@ export class PagerOptions {
     this.enablePageInput = options.enablePageInput || this.enablePageInput;
     this.maximumNumberOfExplicitPagesToDisplay = options.maxmimumNumberOfExplicitPagesToDisplay || this.maximumNumberOfExplicitPagesToDisplay;
     this.pageSize = options.pageSize || this.pageSize;
+    this.id = options.id || this.id;
 
     return this;
   }
@@ -32,6 +33,7 @@ export class PagerOptions {
   public convertFromDecimal: (decimalNumeralRepresentation: number) => any;
   public convertToDecimal: (alternativeNumeralRepresentation: any) => number;
   public totalNumberOfRecords: number;
+  public id: string;
 
   public get firstPage(): number {
     logger.info('get:firstPage');
