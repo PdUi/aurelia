@@ -6,7 +6,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var paths = require('../paths');
 var assign = Object.assign || require('object.assign');
 var notify = require('gulp-notify');
-var typescript = require('gulp-tsb');
+var browserSync = require('browser-sync');
+var typescript = require('gulp-typescript');
 var sass = require('gulp-sass');
 
 // transpiles changed es6 files to SystemJS format
@@ -16,13 +17,16 @@ var sass = require('gulp-sass');
 var typescriptCompiler = typescriptCompiler || null;
 gulp.task('build-system', function() {
   if(!typescriptCompiler) {
-    typescriptCompiler = typescript.create(require('../../tsconfig.json').compilerOptions);
+    typescriptCompiler = typescript.createProject('tsconfig.json', {
+      "typescript": require('typescript')
+    });
   }
   return gulp.src(paths.dtsSrc.concat(paths.source))
-    .pipe(plumber())
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(changed(paths.output, {extension: '.ts'}))
     .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(typescriptCompiler())
-    .pipe(sourcemaps.write({includeContent: false, sourceRoot: '/src'}))
+    .pipe(typescript(typescriptCompiler))
+    .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: '/src'}))
     .pipe(gulp.dest(paths.output));
 });
 
@@ -34,15 +38,17 @@ gulp.task('build-html', function() {
 });
 
 // copies changed css files to the output directory
-gulp.task('build-css', function() {
+gulp.task('build-scss', function() {
   // return gulp.src(paths.css)
   //   .pipe(changed(paths.output, {extension: '.css'}))
-  //   .pipe(gulp.dest(paths.output));
-    return gulp.src(paths.scss)
+  //   .pipe(gulp.dest(paths.output))
+  //   .pipe(browserSync.stream());
+  return gulp.src(paths.scss)
     .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
     .pipe(changed(paths.output, {extension: '.scss'}))
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(paths.output));
+    .pipe(gulp.dest(paths.output))
+    .pipe(browserSync.stream());
 });
 
 // this task calls the clean task (located
@@ -52,7 +58,7 @@ gulp.task('build-css', function() {
 gulp.task('build', function(callback) {
   return runSequence(
     'clean',
-    ['build-system', 'build-html', 'build-css'],
+    ['build-system', 'build-html', 'build-scss'],
     callback
   );
 });

@@ -1,5 +1,5 @@
 import {bindable, containerless, LogManager} from 'aurelia-framework';
-import {ColumnDefinition} from 'components/grid/column-definition';
+import {ColumnDefinition} from './column-definition';
 
 let logger = LogManager.getLogger('grid-options');
 

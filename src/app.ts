@@ -1,9 +1,9 @@
 import {inject} from 'aurelia-framework';
-import {IndividualFactory} from 'factories/individual-factory';
-import {PagerOptions} from 'components/pager/pager-options';
-import {GridOptions} from 'components/grid/grid-options';
-import {GridAction} from 'components/grid/grid-action';
-import {ColumnDefinition} from 'components/grid/column-definition';
+import {IndividualFactory} from './factories/individual-factory';
+import {PagerOptions} from './components/pager/pager-options';
+import {GridOptions} from './components/grid/grid-options';
+import {GridAction} from './components/grid/grid-action';
+import {ColumnDefinition} from './components/grid/column-definition';
 
 @inject(IndividualFactory)
 export class App {

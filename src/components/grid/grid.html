@@ -15,7 +15,7 @@
                 <i show.bind="sortedColumnId === columnDefinition.id && sortDirection === 'descending'" class="glyphicon glyphicon-chevron-down">&#9660;</i>
               </div>
             </div>
-            <div class="filter">&sdote;</div>
+            <!--<div class="filter">&sdote;</div>-->
           </th>
           <th if.bind="!hasIndividualColumnPerAction && actions.length > 0" id="grid-actions-column"></th>
           <th if.bind="hasIndividualColumnPerAction"
@@ -27,6 +27,7 @@
         <tr repeat.for="row of rows" class="${ row.hasChanged ? 'changed' : ''} ${ selectedRowId === row.id ? 'selected' : '' } ${ hoveredRowId && hoveredRowId === row.id ? 'hovered' : '' }">
           <td repeat.for="columnDefinition of columnDefinitions"
               click.delegate="onCellClicked($event, columnDefinition, row)"
+              dblclick.delegate="onCellDblClicked($event, columnDefinition, row)"
               mouseenter.trigger="onMouseEnter($event, columnDefinition, row)"
               mouseleave.trigger="onMouseLeave($event, columnDefinition, row)"
               class="${ row.changes[columnDefinition.propertyName] !== row[columnDefinition.propertyName] ? 'changed' : '' } ${ selectedColumnId === columnDefinition.id  ? 'selected' : '' } ${ hoveredColumnId === columnDefinition.id ? 'hovered' : '' }">

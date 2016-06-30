@@ -1,6 +1,6 @@
 import {bindable, containerless, inject, LogManager} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {PagerOptions} from 'components/pager/pager-options';
+import {PagerOptions} from './pager-options';
 
 let logger = LogManager.getLogger('pager');
 

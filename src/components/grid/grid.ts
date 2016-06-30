@@ -1,8 +1,8 @@
 import {bindable, containerless, inject, LogManager} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {ColumnDefinition} from 'components/grid/column-definition';
-import {GridOptions} from 'components/grid/grid-options';
-import {GridAction} from 'components/grid/grid-action';
+import {ColumnDefinition} from './column-definition';
+import {GridOptions} from './grid-options';
+import {GridAction} from './grid-action';
 
 let logger = LogManager.getLogger('grid');
 
@@ -28,8 +28,7 @@ export class Grid {
   private _id: string;
   private _eventAggregator: EventAggregator;
 
-   public constructor(eventAggregator: EventAggregator) {
- //public constructor() {
+  public constructor(eventAggregator: EventAggregator) {
     logger.info('constructor');
     this._eventAggregator = eventAggregator;
     this.processOptions(new GridOptions());
@@ -65,6 +64,15 @@ export class Grid {
 
   public onCellClicked(event, columnDefinition, row) {
     logger.info('onCellClicked(' + JSON.stringify(event) + ', ' + JSON.stringify(columnDefinition) + ', ' + JSON.stringify(row) + ')');
+    if (this.enableInlineEditing) {
+      this.selectedColumnId = columnDefinition.id;
+      this.selectedRowId = row.id;
+      this.giveCellInputFocus(event.toElement);
+    }
+  }
+
+  public onCellDblClicked(event, columnDefinition, row) {
+    logger.info('onCellDblClicked(' + JSON.stringify(event) + ', ' + JSON.stringify(columnDefinition) + ', ' + JSON.stringify(row) + ')');
     if (this.enableInlineEditing) {
       this.selectedColumnId = columnDefinition.id;
       this.selectedRowId = row.id;
