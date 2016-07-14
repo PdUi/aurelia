@@ -138,14 +138,12 @@ export class Grid {
         this.sortDirection = 'none';
     }
 
-    //this.sort(columnDefinition);
     this._eventAggregator.publish('SortRequested', {id: this._id, columnDefinition: columnDefinition, sortDirection: this.sortDirection});
   }
 
   public performAction(action: GridAction, row: any) {
     logger.info('performAction(' + JSON.stringify(action) + ', ' + JSON.stringify(row) + ')');
     this._eventAggregator.publish(action.description + 'Requested', {id: this._id, row: row});
-    //action.action(row);
   }
 
   public rowHasChanges(row: any) {
